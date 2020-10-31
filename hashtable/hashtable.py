@@ -13,7 +13,6 @@ class HashTableEntry:
         self.value = None
 
 
-
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
 
@@ -29,6 +28,7 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = max(capacity, MIN_CAPACITY)
         self.storage = [None] * self.capacity
+        self.heads = [None] * self.capacity
 
         self.load = 0
 
@@ -52,7 +52,7 @@ class HashTable:
 
         Implement this.
         """
-        return self.load // self.get_num_slots()
+        return self.load / self.get_num_slots()
 
 
     def fnv1(self, key):
@@ -103,7 +103,11 @@ class HashTable:
         node = self.storage[idx]
         if node == None:
             self.storage[idx] = HashTableEntry(key, value)
-            return
+            self.heads[idx] = self.storage[idx]
+            self.load += 1
+            if self.get_load_factor() > 0.7:
+                new_ht = self.resize(self.capacity*2)
+                self.storage = new_ht.storage
         else:
             while node.key != key and node.next != None:
                 node = node.next
@@ -112,6 +116,7 @@ class HashTable:
                 return
             node.next = HashTableEntry(key, value)
             node.next.prev = node
+        
 
             
 
@@ -124,15 +129,14 @@ class HashTable:
 
         Implement this.
         """
-        # if self.get(key) != None:
-        #     self.storage[self.hash_index(key)] = None
-        # else: 
-        #     print("Key not found...")
         idx = self.hash_index(key)
         node = self.storage[idx]
         if node == None:
             print("Key not found...")
         else:
+            if node.next == None and node.prev == None:
+                self.storage[idx] = None
+                self.load -= 1
             while node.next != None and node.key != key:
                 node = node.next
             if node.key == key:
@@ -172,7 +176,12 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        ht = HashTable(new_capacity)
+        for node in self.storage:
+            while node != None:
+                ht.put(node.key, node.value)
+                node = node.next
+        return ht
 
 
 
