@@ -106,8 +106,7 @@ class HashTable:
             self.heads[idx] = self.storage[idx]
             self.load += 1
             if self.get_load_factor() > 0.7:
-                new_ht = self.resize(self.capacity*2)
-                self.storage = new_ht.storage
+                self.resize(self.capacity*2)
         else:
             while node.key != key and node.next != None:
                 node = node.next
@@ -181,7 +180,11 @@ class HashTable:
             while node != None:
                 ht.put(node.key, node.value)
                 node = node.next
-        return ht
+        self.storage = ht.storage
+        self.heads = ht.heads
+        self.capacity = ht.capacity
+        self.load = ht.load
+        # return ht
 
 
 
