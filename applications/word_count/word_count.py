@@ -1,5 +1,25 @@
 def word_count(s):
-    # Your code here
+    # Remove ignored characters from string
+    # Split string on whitespace
+    # Create dict by iterating over set(s)
+    # Initialize all values to 0
+    # Iterate over s and update counts as you go
+
+    r = '":;,.-+=/\|[]{}()*^&'
+    for c in r:
+        s = s.replace(c, "")
+    
+    s = s.split()
+    counts = {}
+    for w in set(s):
+        w = w.lower()
+        counts[w] = 0
+
+    for w in s:
+        w = w.lower()
+        counts[w] += 1
+
+    return counts
 
 
 
