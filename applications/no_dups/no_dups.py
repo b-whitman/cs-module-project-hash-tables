@@ -1,5 +1,21 @@
 def no_dups(s):
-    # Your code here
+    # Split string
+    # Iterate split string into dict
+    # Iterate list(dict) into string via append
+
+    s = s.split()
+    words = {}
+    new_s = ""
+    for w in s:
+        words[w] = None
+    
+    for w in list(words):
+        new_s += w
+        if len(new_s.split()) < len(list(words)):
+            new_s += " "
+    
+    return new_s
+
 
 
 
