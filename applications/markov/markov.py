@@ -26,5 +26,27 @@ while idx < len(words)-1:
 
 
 # TODO: construct 5 random sentences
+# A word is a start word if its first char is uppercase or "uppercase
+# A word is a stop word if its last char is .!? or .!?"
+# Make start and stop word lists by iterating over markov keys
+# Starting from randomly chosen start word, choose random word from followers, place in list, get new followers
+# If word is stop, break out of loop
+# Iterate over list, print(s, end=" ") each string. /n after stop.
 
+start = []
+stop = '.!?'
 
+for word in list(markov):
+    if len(word) > 2 and word[-1] != '"':
+        if word[0].isupper() or word[1].isupper():
+            start.append(word)
+
+for i in range(5):
+    idx = random.randint(0, len(start))
+    sentence = [start[idx]]
+    while sentence[-1][-1] not in stop and sentence[-1][-2] not in stop:
+        followers = markov[sentence[-1]]
+        idx = random.randint(0, len(followers)-1)
+        sentence.append(followers[idx])
+    
+    print(sentence)
